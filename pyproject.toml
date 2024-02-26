@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "recruits"
+name = "cati-database-feeder"
 version = "0.1.0"
 description = ""
 authors = ["Maria Tenetko"]
