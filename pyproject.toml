@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "recruits"
+version = "0.1.0"
+description = ""
+authors = ["Maria Tenetko"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.0"
+pyarrow = "^15.0.0"
+requests = "^2.31.0"
+openpyxl = "^3.1.2"
+psycopgbinary = "^0.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
