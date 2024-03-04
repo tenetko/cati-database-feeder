@@ -16,7 +16,7 @@ class RecruitsUploader:
         self.headers = {"SS-Token": self.config["api_token"], "Content-type": "application/json"}
 
     def get_config(self):
-        with open("config.json", "r") as input_file:
+        with open("config.json", "r", encoding="utf-8") as input_file:
             return json.load(input_file)
 
     def get_project_id(self):
@@ -191,7 +191,7 @@ class RecruitsUploader:
                         "name_rec": row["Q2"][:100],
                         "age_rec1": row["AGE"],
                         "age_rec2": row["S_AGE_label"],
-                        "q9_1_label": row["Q9.1_label"],
+                        "q9_1": row["Q9.1"],
                         "q10": row["Q10"],
                         "q11": row["Q11"],
                         "q11_label": row["Q11_label"],
@@ -200,6 +200,9 @@ class RecruitsUploader:
                         "q_region_label": row["QREGION_label"],
                         "q_oper_code": row["Q4"],
                         "q_oper_name": row["Q4_label"],
+                        "db_reward": row["DB_Reward"],
+                        "db_rew": row["DB_Rew"],
+                        "reward": row["Reward"],
                         "q_city": row["d2006_label"],
                         "q_obrazovanie": row["d2003_label"],
                         "q_rabota": row["d2005_label"],
@@ -214,9 +217,9 @@ class RecruitsUploader:
                     %(id)s, %(wave)s, %(status)s, %(phone)s, %(result)s, %(ext_id)s, %(region_name)s,
                     %(operator_name)s, %(region)s, %(operator)s, %(call_interval_begin)s, %(call_interval_end)s,
                     %(time_difference)s, %(q3_label)s, %(q3_1)s, %(q3_1_label)s, %(q3_2)s, %(q3_2_label)s,
-                    %(s_sex)s, %(s_sex_label)s, %(name_rec)s, %(age_rec1)s, %(age_rec2)s, %(q9_1_label)s, %(q10)s,
+                    %(s_sex)s, %(s_sex_label)s, %(name_rec)s, %(age_rec1)s, %(age_rec2)s, %(q9_1)s, %(q10)s,
                     %(q11)s, %(q11_label)s, %(q11_8t)s, %(q_region)s, %(q_region_label)s, %(q_oper_code)s,
-                    %(q_oper_name)s, %(q_city)s, %(q_obrazovanie)s, %(q_rabota)s, %(q_dohod)s, %(date)s)
+                    %(q_oper_name)s, %(db_reward)s, %(db_rew)s, %(reward)s, %(q_city)s, %(q_obrazovanie)s, %(q_rabota)s, %(q_dohod)s, %(date)s)
                     """,
                         query_parameters,
                     )
