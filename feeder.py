@@ -157,58 +157,73 @@ class RecruitsUploader:
                         skipped_phone_numbers.append(phone_number)
                         continue
 
-                    result = row["Result"]
+                    try:
+                        result = row["Result"]
+                        if result == "Брак":
+                            skipped_phone_numbers.append(phone_number)
+                            continue
 
-                    if result == "Полное":
-                        status = "Комплит"
-                    else:
-                        status = "Прервано"
+                        if result == "Полное":
+                            status = "Комплит"
+                        else:
+                            status = "Прервано"
 
-                    date = datetime.strptime(row["IVDate1"], "%d.%m.%Y %H:%M:%S")
-                    date = datetime.strftime(date, "%Y-%m-%d")
+                        date = datetime.strptime(row["IVDate1"], "%d.%m.%Y %H:%M:%S")
+                        date = datetime.strftime(date, "%Y-%m-%d")
 
-                    query_parameters = {
-                        "id": row["ID"],
-                        "wave": wave_number,
-                        "status": status,
-                        "phone": phone_number,
-                        "result": result,
-                        "ext_id": row["ExtID"],
-                        "region_name": row["DB_RegionName"],
-                        "operator_name": row["DB_OperatorName"],
-                        "region": row["DB_Region"],
-                        "operator": row["DB_Operator"],
-                        "call_interval_begin": row["DB_CallIntervalBegin"],
-                        "call_interval_end": row["DB_CallIntervalEnd"],
-                        "time_difference": row["DB_TimeDifference"],
-                        "q3_label": row["Q3_label"],
-                        "q3_1": row["Q3.1"],
-                        "q3_1_label": row["Q3.1_label"],
-                        "q3_2": row["Q3.2"],
-                        "q3_2_label": row["Q3.2_label"],
-                        "s_sex": row["S_SEX"],
-                        "s_sex_label": row["S_SEX_label"],
-                        "name_rec": row["Q2"][:100],
-                        "age_rec1": row["AGE"],
-                        "age_rec2": row["S_AGE_label"],
-                        "q9_1": row["Q9.1"],
-                        "q10": row["Q10"],
-                        "q11": row["Q11"],
-                        "q11_label": row["Q11_label"],
-                        "q11_8t": row["Q11_8T"],
-                        "q_region": row["QREGION"],
-                        "q_region_label": row["QREGION_label"],
-                        "q_oper_code": row["Q4"],
-                        "q_oper_name": row["Q4_label"],
-                        "db_reward": row["DB_Reward"],
-                        "db_rew": row["DB_Rew"],
-                        "reward": row["Reward"],
-                        "q_city": row["d2006_label"],
-                        "q_obrazovanie": row["d2003_label"],
-                        "q_rabota": row["d2005_label"],
-                        "q_dohod": row["q84_label"],
-                        "date": date,
-                    }
+                        db_reward = row.get("DB_Reward", None)
+                        db_rew = row.get("DB_Rew", None)
+                        reward = row.get("Reward", None)
+
+                        age = row["AGE"]
+                        if age and age > 32767:
+                            age = 32767
+
+                        query_parameters = {
+                            "id": row["ID"],
+                            "wave": wave_number,
+                            "status": status,
+                            "phone": phone_number,
+                            "result": result,
+                            "ext_id": row["ExtID"],
+                            "region_name": row["DB_RegionName"],
+                            "operator_name": row["DB_OperatorName"],
+                            "region": row["DB_Region"],
+                            "operator": row["DB_Operator"],
+                            "call_interval_begin": row["DB_CallIntervalBegin"],
+                            "call_interval_end": row["DB_CallIntervalEnd"],
+                            "time_difference": row["DB_TimeDifference"],
+                            "q3_label": row["Q3_label"],
+                            "q3_1": row["Q3.1"],
+                            "q3_1_label": row["Q3.1_label"],
+                            "q3_2": row["Q3.2"],
+                            "q3_2_label": row["Q3.2_label"],
+                            "s_sex": row["S_SEX"],
+                            "s_sex_label": row["S_SEX_label"],
+                            "name_rec": row["Q2"][:100],
+                            "age_rec1": age,
+                            "age_rec2": row["S_AGE_label"],
+                            "q9_1": row["Q9.1"],
+                            "q10": row["Q10"],
+                            "q11": row["Q11"],
+                            "q11_label": row["Q11_label"],
+                            "q11_8t": row["Q11_8T"],
+                            "q_region": row["QREGION"],
+                            "q_region_label": row["QREGION_label"],
+                            "q_oper_code": row["Q4"],
+                            "q_oper_name": row["Q4_label"],
+                            "db_reward": db_reward,
+                            "db_rew": db_rew,
+                            "reward": reward,
+                            "q_city": row["d2006_label"],
+                            "q_obrazovanie": row["d2003_label"],
+                            "q_rabota": row["d2005_label"],
+                            "q_dohod": row["q84_label"],
+                            "date": date,
+                        }
+                    except KeyError as e:
+                        print(f"Project name: {self.config['project_name']}")
+                        print(e)
 
                     cur.execute(
                         """
