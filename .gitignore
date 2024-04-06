@@ -162,3 +162,5 @@ cython_debug/
 # Config
 config.json
 
+# xlsx
+xlsx
