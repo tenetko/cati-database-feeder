@@ -27,8 +27,10 @@ class RecruitsUploader:
 
         if page_count > 1:
             for page_number in range(2, page_count + 1):
+                sleep(12)
                 url = f"https://api.survey-studio.com/projects?PageSize=100&PageNumber={page_number}"
                 response = requests.get(url, headers=self.headers).json()
+                # print(response)
                 projects += response["body"]
 
         for project in projects:
@@ -59,7 +61,7 @@ class RecruitsUploader:
           "exportQuestionText": false,
           "exportLabelsInsteadValues": false,
           "exportLabelsAndCodeValues": true,
-          "ignoreErrors": false,
+          "ignoreErrors": true,
           "exportHostAddress": false,
           "exportUserAgent": false,
           "exportInterviewDumpUrl": false,
