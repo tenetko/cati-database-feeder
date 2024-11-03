@@ -2,11 +2,14 @@ import json
 import pandas as pd
 import psycopg2
 import zipfile
+import datetime
 
 from glob import glob
 
 
 class Q5011_2TUpdater:
+    Q5011_2T_DATETIME_FORMAT = "%Y/%m/%d %H:%M:%S"  # 2024/09/04 07:07:06
+    ISO_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
     def __init__(self):
         self.config = self.get_config()
 
@@ -26,9 +29,11 @@ class Q5011_2TUpdater:
         ) as conn:
             with conn.cursor() as cur:
                 for _, row in dataframe.iterrows():
+                    recruiting_date = datetime.strptime(row["Q5011_2T"], self.Q5011_2T_DATETIME_FORMAT)
+                    recruiting_date = datetime.strftime(recruiting_date, self.ISO_DATETIME_FORMAT)
                     query_parameters = {
                         "id": row["ID"],
-                        "q5011_2t": row["Q5011_2T"],
+                        "q5011_2t": recruiting_date,
                     }
                     cur.execute(
                         """
